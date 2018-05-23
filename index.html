@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head prefix="og: http://ogp.me/ns# website: http://ogp.me/ns/website#">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue-color</title>
+    <style class="cp-pen-styles">
+        .column-box>div {
+            box-sizing: border-box;
+            margin: 0 10px;
+        }
+
+        @media (min-width: 700px) {
+            .column-box {
+                display: flex;
+                max-width: 700px;
+            }
+            .column-box>div {
+                width: 50%;
+            }
+        }
+
+        #color-box {
+            width: 200px;
+            height: 50px;
+            border: 1px solid #ddd;
+        }
+
+        .control-item {
+            margin: 15px 0;
+        }
+
+        .control-item p {
+            margin: 3px 0;
+        }
+
+        .control-item label {
+            font-weight: bold;
+        }
+
+        input[type="number"] {
+            width: 3em;
+            font-size: 16px;
+        }
+
+        input[type="range"] {
+            width: 180px;
+        }
+
+        #preview-box {
+            margin-top: 10px;
+        }
+
+        #preview-box p {
+            margin: 0;
+        }
+
+        .unit {
+            display: inline-block;
+            width: 1em;
+        }
+
+        .comment {
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="column-box" id="app">
+        <div id="control-box">
+            <div class="control-item">
+                <p>
+                    <label>H</label>
+                    <input type="number" min="0" max="360" v-model="h" />
+                    <span class="unit">°</span>
+                    <input type="range" min="0" max="360" v-model="h" />
+                </p>
+                <p class="comment">Hue（色相） 0°：赤、180°：青緑</p>
+            </div>
+            <div class="control-item">
+                <p>
+                    <label>S</label>
+                    <input type="number" min="0" max="100" v-model="s" />
+                    <span class="unit">％</span>
+                    <input type="range" min="0" max="100" v-model="s" />
+                </p>
+                <p class="comment">Saturation（彩度） 0％：灰色</p>
+            </div>
+            <div class="control-item">
+                <p>
+                    <label>L</label>
+                    <input type="number" min="0" max="100" v-model="l" />
+                    <span class="unit">％</span>
+                    <input type="range" min="0" max="100" v-model="l" />
+                </p>
+                <p class="comment">Lightness（輝度） 0％：黒、100％：白</p>
+            </div>
+            <!--p {{calcMax()}}-->
+            <!--p {{calcMin()}}-->
+        </div>
+        <div id="preview-box">
+            <svg id="color-box">
+                <rect x="0" y="0" width="200" height="50" v-bind:fill="colorcode"></rect>
+            </svg>
+            <p id="code">{{colorcode}}</p>
+            <p id="rgb">rgb({{r}}, {{g}}, {{b}})</p>
+            <p id="hsl">hsl({{h}}, {{s}}%, {{l}}%)</p>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.min.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue!',
+                h: 10,
+                s: 50,
+                l: 50
+            },
+            methods: {
+                calcMax: function () {
+                    //return ((this.s/100 * (1 - Math.abs(2*this.l/100-1))) / 2 + this.l/100)*100
+                    return this.s * (100 - Math.abs(2 * this.l - 100)) / 100 / 2 + parseInt(this.l)
+                },
+                calcMin: function () {
+                    return - this.s * (100 - Math.abs(2 * this.l - 100)) / 100 / 2 + parseInt(this.l)
+                },
+                hslToRgb: function () {
+                    let max = this.calcMax();
+                    let min = this.calcMin();
+                    let arr = [];
+                    // [r, g, b]
+                    if (this.h >= 0 && this.h < 60) {
+                        arr = [max, (max - min) * (this.h / 60) + min, min];
+                    } else if (this.h >= 60 && this.h < 120) {
+                        arr = [(max - min) * ((120 - this.h) / 60) + min, max, min];
+                    } else if (this.h >= 120 && this.h < 180) {
+                        arr = [min, max, (max - min) * ((this.h - 120) / 60) + min];
+                    } else if (this.h >= 180 && this.h < 240) {
+                        arr = [min, (max - min) * ((240 - this.h) / 60) + min, max];
+                    } else if (this.h >= 240 && this.h < 300) {
+                        arr = [(max - min) * ((this.h - 240) / 60) + min, min, max];
+                    } else if (this.h >= 300 && this.h <= 360) {
+                        arr = [max, min, (max - min) * ((360 - this.h) / 60) + min];
+                    } else {
+                        arr = [max, max, max];
+                    }
+                    for (i = 0; i < arr.length; i++) {
+                        arr[i] = arr[i] * 255 / 100;
+                    }
+                    return arr;
+                },
+            },
+            computed: {
+                r: function () {
+                    let rgb = this.hslToRgb();
+                    return Math.round(rgb[0]);
+                },
+                g: function () {
+                    let rgb = this.hslToRgb();
+                    return Math.round(rgb[1]);
+                },
+                b: function () {
+                    let rgb = this.hslToRgb();
+                    return Math.round(rgb[2]);
+                },
+                colorcode: function () {
+                    let hex_r = ('0' + this.r.toString(16)).slice(-2);
+                    let hex_g = ('0' + this.g.toString(16)).slice(-2);
+                    let hex_b = ('0' + this.b.toString(16)).slice(-2);
+
+                    return '#' + hex_r + hex_g + hex_b;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

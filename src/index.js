@@ -1,4 +1,4 @@
-import './style.css';
+import './style.scss';
 import Vue from 'vue';
 
 var app = new Vue({

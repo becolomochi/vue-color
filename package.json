@@ -22,10 +22,14 @@
   },
   "homepage": "https://github.com/becolomochi/vue-color#readme",
   "devDependencies": {
+    "autoprefixer": "^8.5.1",
     "css-loader": "^0.28.11",
     "html-loader": "^0.5.5",
     "html-webpack-externals-plugin": "^3.8.0",
     "html-webpack-plugin": "^3.2.0",
+    "node-sass": "^4.9.0",
+    "postcss-loader": "^2.1.5",
+    "sass-loader": "^7.0.1",
     "style-loader": "^0.21.0",
     "webpack": "^4.8.3",
     "webpack-cli": "^2.1.4"

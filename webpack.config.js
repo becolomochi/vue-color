@@ -19,6 +19,20 @@ module.exports = {
           module: 'vue',
           entry: 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.min.js',
           global: 'Vue',
+        },
+        {
+          module: 'google-roboto',
+          entry: {
+            path: 'https://fonts.googleapis.com/css?family=Roboto',
+            type: 'css',
+          },
+        },
+        {
+          module: 'google-noto',
+          entry: {
+            path: 'https://fonts.googleapis.com/css?family=Noto+Sans',
+            type: 'css',
+          },
         }
       ]
     }),

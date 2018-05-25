@@ -1,3 +1,7 @@
+body {
+  font-family: Roboto, 'Noto Sans', sans-serif;
+}
+
 .column-box {
   & > div {
     box-sizing: border-box;
@@ -44,4 +48,12 @@ input[type="range"]{
 .comment{
   font-size: 14px;
   color: #777;
+}
+
+#code {
+  font-size: 18px;
+  line-height: 1.75;
+}
+#rgb, #hsl {
+  color: #999;
 }

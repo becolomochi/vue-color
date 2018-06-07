@@ -749,6 +749,14 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   }
 })
 
+document.getElementById('copy-btn').onclick = function(){
+    let elm = document.getElementById('code');
+    let range = document.createRange();
+    range.selectNodeContents(elm);
+    window.getSelection().addRange(range);
+    document.execCommand('copy');
+    alert('copied!');
+  }
 
 /***/ }),
 

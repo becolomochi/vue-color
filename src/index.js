@@ -65,3 +65,12 @@ var app = new Vue({
       }
   }
 })
+
+document.getElementById('copy-btn').onclick = function(){
+    let elm = document.getElementById('code');
+    let range = document.createRange();
+    range.selectNodeContents(elm);
+    window.getSelection().addRange(range);
+    document.execCommand('copy');
+    alert('copied!');
+  }

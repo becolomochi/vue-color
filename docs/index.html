@@ -45,7 +45,7 @@
             <svg id="color-box">
                 <rect x="0" y="0" width="200" height="50" v-bind:fill="colorcode"></rect>
             </svg>
-            <p id="code">{{colorcode}}</p>
+            <p><span id="code">{{colorcode}}</span> <button type="button" id="copy-btn">copy</button></p>
             <p id="rgb">rgb({{r}}, {{g}}, {{b}})</p>
             <p id="hsl">hsl({{h}}, {{s}}%, {{l}}%)</p>
         </div>
